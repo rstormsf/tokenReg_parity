@@ -1,7 +1,7 @@
 //! Token Registry contract.
 //! By Roman Storm (rstormsf@gmail.com), 2017.
 //! Released under the Apache Licence 2.
-import 'zeppelin-solidity/contracts/ownership/Ownable.sol';
+import './Ownable.sol';
 
 pragma solidity ^0.4.15;
 
