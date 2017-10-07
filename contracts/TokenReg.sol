@@ -59,7 +59,7 @@ contract TokenReg is Ownable {
  event Registered(string tla, uint256 indexed id, address addr, string name);
  event Unregistered(string tla, uint256 indexed id);
  event MetaChanged(uint256 indexed id, bytes32 indexed key, bytes32 value);
- event TokenRecordUpdated(uint256 indexed id, address _addr, string _tla, uint256 _base, string name);
+ event TokenRecordUpdated(uint256 indexed id, address _addr);
 
  function register(address _addr, string _tla, string _name) public payable validToken(_addr, _tla, _name) returns(bool) {
   uint256 base = fetchErcValues(_addr);
@@ -130,11 +130,12 @@ contract TokenReg is Ownable {
   MetaChanged(_id, _key, _value);
  }
 
- function updateToken(uint256 _id, address _newAddr, string _tla, string _name) public only_token_owner(_id) validToken(_newAddr, _tla, _name) {
-  Token memory oldToken = tokens[_id];
+ function updateToken(uint256 _id, address _newAddr) public only_token_owner(_id) {
+  require(_newAddr != 0x0);
   uint256 base = fetchErcValues(_newAddr);
-  tokens[_id] = Token(_newAddr, _tla, base, _name, oldToken.owner);
-  TokenRecordUpdated(_id, _newAddr, _tla, base, _name);
+  tokens[_id].addr = _newAddr;
+  tokens[_id].base = base;
+  TokenRecordUpdated(_id, _newAddr);
  }
 
  function drain() public onlyOwner {
