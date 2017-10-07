@@ -5,3 +5,9 @@ contract Token {
   string public constant symbol = "SIM";
   uint8 public constant decimals = 18;
 }
+
+contract AnotherToken {
+  string public constant name = "SimpleToken";
+  string public constant symbol = "SIM";
+  uint8 public constant decimals = 10;
+}

@@ -36,10 +36,7 @@ contract TokenReg is Ownable {
   require(mapFromTLA[_tla] == 0);
   _;
  }
- modifier when_is_tla(string _tla) {
-  require(bytes(_tla).length == 3);
-  _;
- }
+
  modifier when_has_tla(string _tla) {
   require(mapFromTLA[_tla] != 0);
   _;
@@ -51,7 +48,7 @@ contract TokenReg is Ownable {
 
  modifier validToken(address _addr, string _tla, string _name) {
   require(_addr != 0x0);
-  require(bytes(_tla).length > 0);
+  require(bytes(_tla).length >= 3);
   require(bytes(_name).length > 0);
   _;
  }
@@ -71,7 +68,7 @@ contract TokenReg is Ownable {
   base = 10 ** erc20.decimals();
  }
 
- function registerAs(address _addr, string _tla, uint256 _base, string _name, address _owner) public payable when_fee_paid when_address_free(_addr) when_is_tla(_tla) when_tla_free(_tla) returns(bool) {
+ function registerAs(address _addr, string _tla, uint256 _base, string _name, address _owner) public payable when_fee_paid when_address_free(_addr) when_tla_free(_tla) returns(bool) {
   tokens.push(Token(_addr, _tla, _base, _name, _owner));
   mapFromAddress[_addr] = tokens.length;
   mapFromTLA[_tla] = tokens.length;
@@ -84,6 +81,9 @@ contract TokenReg is Ownable {
   delete mapFromAddress[tokens[_id].addr];
   delete mapFromTLA[tokens[_id].tla];
   delete tokens[_id];
+  if(tokens.length > 0) {
+    tokens.length--;
+  }
  }
 
  function setFee(uint256 _fee) public onlyOwner {
