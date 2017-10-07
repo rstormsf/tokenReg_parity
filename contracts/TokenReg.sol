@@ -56,8 +56,8 @@ contract TokenReg is Ownable {
   _;
  }
 
- event Registered(string indexed tla, uint256 indexed id, address addr, string name);
- event Unregistered(string indexed tla, uint256 indexed id);
+ event Registered(string tla, uint256 indexed id, address addr, string name);
+ event Unregistered(string tla, uint256 indexed id);
  event MetaChanged(uint256 indexed id, bytes32 indexed key, bytes32 value);
  event TokenRecordUpdated(uint256 indexed id, address _addr, string _tla, uint256 _base, string name);
 
