@@ -29,7 +29,7 @@ contract('TokenReg', function([owner, investor]) {
       let count = await tokenReg.tokenCount();
       assert.equal(count.toNumber(), 0);
       const fee = await tokenReg.fee();
-      await tokenReg.register(token.address, "SIM", "SimpleToken", {from: owner, value: fee, gas: 200000});
+      await tokenReg.register(token.address, "SIM", "SimpleToken", {from: owner, value: fee});
       count = await tokenReg.tokenCount();
       assert.equal(1, count.toNumber());
     });
@@ -37,7 +37,7 @@ contract('TokenReg', function([owner, investor]) {
       let count = await tokenReg.tokenCount();
       assert.equal(count.toNumber(), 0);
       const fee = await tokenReg.fee();
-      await expectThrow(tokenReg.register(token.address, "", "SimpleToken", {from: owner, value: fee, gas: 200000}));
+      await expectThrow(tokenReg.register(token.address, "", "SimpleToken", {from: owner, value: fee}));
       count = await tokenReg.tokenCount();
       assert.equal(0, count.toNumber());
     });
@@ -45,7 +45,7 @@ contract('TokenReg', function([owner, investor]) {
       let count = await tokenReg.tokenCount();
       assert.equal(count.toNumber(), 0);
       const fee = await tokenReg.fee();
-      await expectThrow(tokenReg.register(token.address, "SIM", "", {from: owner, value: fee, gas: 200000}));
+      await expectThrow(tokenReg.register(token.address, "SIM", "", {from: owner, value: fee}));
       count = await tokenReg.tokenCount();
       assert.equal(0, count.toNumber());
     });
@@ -53,7 +53,7 @@ contract('TokenReg', function([owner, investor]) {
       let count = await tokenReg.tokenCount();
       assert.equal(count.toNumber(), 0);
       const fee = await tokenReg.fee();
-      await expectThrow(tokenReg.register(token.address, "SIM", "", {from: owner, value: fee.sub(1), gas: 200000}));
+      await expectThrow(tokenReg.register(token.address, "SIM", "", {from: owner, value: fee.sub(1)}));
       count = await tokenReg.tokenCount();
       assert.equal(0, count.toNumber());
     });
@@ -61,8 +61,8 @@ contract('TokenReg', function([owner, investor]) {
       let count = await tokenReg.tokenCount();
       assert.equal(count.toNumber(), 0);
       const fee = await tokenReg.fee();
-      await tokenReg.register(token.address, "SIM", "Simple", {from: owner, value: web3.toWei(0.05, 'ether'), gas: 200000});
-      await expectThrow(tokenReg.register(token.address, "SIM", "", {from: owner, value: web3.toWei(0.05, 'ether'), gas: 200000}));
+      await tokenReg.register(token.address, "SIM", "Simple", {from: owner, value: web3.toWei(0.05, 'ether')});
+      await expectThrow(tokenReg.register(token.address, "SIM", "", {from: owner, value: web3.toWei(0.05, 'ether')}));
       count = await tokenReg.tokenCount();
       assert.equal(1, count.toNumber());
     });
@@ -70,9 +70,9 @@ contract('TokenReg', function([owner, investor]) {
       let count = await tokenReg.tokenCount();
       assert.equal(count.toNumber(), 0);
       const fee = await tokenReg.fee();
-      await tokenReg.register(token.address, "SIM", "Simple", {from: owner, value: web3.toWei(0.05, 'ether'), gas: 200000});
+      await tokenReg.register(token.address, "SIM", "Simple", {from: owner, value: web3.toWei(0.05, 'ether')});
       token = await Token.new();
-      await expectThrow(tokenReg.register(token.address, "SIM", "AnotherSIM", {from: owner, value: web3.toWei(0.05, 'ether'), gas: 200000}));
+      await expectThrow(tokenReg.register(token.address, "SIM", "AnotherSIM", {from: owner, value: web3.toWei(0.05, 'ether')}));
       count = await tokenReg.tokenCount();
       assert.equal(1, count.toNumber());
     });
@@ -85,7 +85,7 @@ contract('TokenReg', function([owner, investor]) {
       tokenReg = await TokenReg.new();
       token = await Token.new();
       const fee = await tokenReg.fee();
-      await tokenReg.register(token.address, "SIM", "SimpleToken", {from: owner, value: fee, gas: 200000});
+      await tokenReg.register(token.address, "SIM", "SimpleToken", {from: owner, value: fee});
       
     })
     it('happy path', async function(){
@@ -136,7 +136,7 @@ contract('TokenReg', function([owner, investor]) {
       tokenReg = await TokenReg.new();
       token = await Token.new();
       const fee = await tokenReg.fee();
-      await tokenReg.register(token.address, "SIM", "SimpleToken", {from: owner, value: fee, gas: 200000});
+      await tokenReg.register(token.address, "SIM", "SimpleToken", {from: owner, value: fee});
       [id] = await tokenReg.fromAddress(token.address);
     })
 
@@ -155,7 +155,7 @@ contract('TokenReg', function([owner, investor]) {
       tokenReg = await TokenReg.new();
       token = await Token.new();
       const fee = await tokenReg.fee();
-      await tokenReg.register(token.address, "SIM", "SimpleToken", {from: owner, value: fee, gas: 200000});
+      await tokenReg.register(token.address, "SIM", "SimpleToken", {from: owner, value: fee});
       [id, tla, base, name, owner] = await tokenReg.fromAddress(token.address);
     })
     it('happy path', async function(){
@@ -179,7 +179,7 @@ contract('TokenReg', function([owner, investor]) {
     beforeEach(async function(){
       tokenReg = await TokenReg.new();
       token = await Token.new();
-      await tokenReg.register(token.address, "SIM", "SimpleToken", {from: investor, value: web3.toWei(1, 'ether'), gas: 200000});
+      await tokenReg.register(token.address, "SIM", "SimpleToken", {from: investor, value: web3.toWei(1, 'ether')});
     })
     it('happy path', async function(){
       let pre = await web3.eth.getBalance(owner);
