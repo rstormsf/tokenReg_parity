@@ -58,14 +58,29 @@ contract TokenReg is Ownable {
  event MetaChanged(uint256 indexed id, bytes32 indexed key, bytes32 value);
  event TokenRecordUpdated(uint256 indexed id, address _addr);
 
- function register(address _addr, string _tla, string _name) public payable validToken(_addr, _tla, _name) returns(bool) {
+ function register(address _addr, string _tla, string _name, uint256 _base) public payable validToken(_addr, _tla, _name) returns(bool) {
   uint256 base = fetchErcValues(_addr);
+  if(base == 0) {
+    base = _base;
+  }
   return registerAs(_addr, _tla, base, _name, msg.sender);
  }
 
+  function getEncodedData() constant returns(bytes32) {
+    return keccak256("decimals()");
+  }
+    
+  function getDecimals(address _token) constant returns(bool) {
+    return _token.call(bytes4(getEncodedData()));
+  }
+
  function fetchErcValues(address _tokenAddr) public constant returns(uint256 base) {
-  ERC20 erc20 = ERC20(_tokenAddr);
-  base = 10 ** erc20.decimals();
+  if(getDecimals(_tokenAddr)) {
+    ERC20 erc20 = ERC20(_tokenAddr);
+    base = 10 ** erc20.decimals();
+  } else {
+    base = 0;
+  }
  }
 
  function registerAs(address _addr, string _tla, uint256 _base, string _name, address _owner) public payable when_fee_paid when_address_free(_addr) when_tla_free(_tla) returns(bool) {
@@ -130,9 +145,12 @@ contract TokenReg is Ownable {
   MetaChanged(_id, _key, _value);
  }
 
- function updateToken(uint256 _id, address _newAddr) public only_token_owner(_id) {
+ function updateToken(uint256 _id, address _newAddr, uint256 _base) public only_token_owner(_id) {
   require(_newAddr != 0x0);
   uint256 base = fetchErcValues(_newAddr);
+  if(base == 0) {
+    base = _base;
+  }
   tokens[_id].addr = _newAddr;
   tokens[_id].base = base;
   TokenRecordUpdated(_id, _newAddr);
